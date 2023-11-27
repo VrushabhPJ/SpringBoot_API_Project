@@ -2,14 +2,17 @@ package com.productservice.productservice.services;
 
 import com.productservice.productservice.dtos.GenericProductDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public interface ProductService {
     GenericProductDto getProductById(Long id);
 
-    void getAllProducts();
+    List<GenericProductDto> getAllProducts();
 
     void deleteProductById(Long id);
 
-    void createProduct();
+    GenericProductDto createProduct(GenericProductDto genericProductDto);
 
     void updateProductById();
 }
