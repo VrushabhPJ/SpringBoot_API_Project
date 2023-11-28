@@ -3,10 +3,13 @@ package com.productservice.productservice.services;
 import com.productservice.productservice.dtos.FakeStoreProductDto;
 import com.productservice.productservice.dtos.GenericProductDto;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -59,8 +62,18 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public void deleteProductById(Long id) {
+    public GenericProductDto deleteProductById(Long id) {
+        RestTemplate restTemplate= restTemplateBuilder.build();
 
+        /*Delete() doesn't return anything, so we implement by using postForEntity() we just change
+        ResponseEntity<FakeStoreProductDto>, "HttpMethod.DELETE"  */
+        RequestCallback requestCallback = restTemplate.acceptHeaderRequestCallback(FakeStoreProductDto.class);
+        ResponseExtractor<ResponseEntity<FakeStoreProductDto>> responseExtractor =
+                restTemplate.responseEntityExtractor(FakeStoreProductDto.class);
+        ResponseEntity<FakeStoreProductDto> responseEntity=
+                restTemplate.execute(specificProductUrl, HttpMethod.DELETE, requestCallback, responseExtractor, id);
+
+        return convertToGenericProductDto(responseEntity.getBody());
     }
 
     @Override
