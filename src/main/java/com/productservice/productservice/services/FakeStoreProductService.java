@@ -4,10 +4,8 @@ import com.productservice.productservice.dtos.FakeStoreProductDto;
 import com.productservice.productservice.dtos.GenericProductDto;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
@@ -86,7 +84,24 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public void updateProductById() {
+    public GenericProductDto updateProductById(Long id, GenericProductDto genericProductDto) {
+        // getProductById + createProduct
+        RestTemplate restTemplate= restTemplateBuilder.build();
+        // getProductById
+        ResponseEntity<FakeStoreProductDto> responseEntity =
+                restTemplate.getForEntity(specificProductUrl, FakeStoreProductDto.class, id);
+        GenericProductDto genericProductDto1= convertToGenericProductDto(responseEntity.getBody());
 
+        // createProduct
+        genericProductDto1.setTitle(genericProductDto.getTitle());
+        genericProductDto1.setPrice(genericProductDto.getPrice());
+        genericProductDto1.setCategory(genericProductDto.getCategory());
+        genericProductDto1.setDescription(genericProductDto.getDescription());
+        genericProductDto1.setImage(genericProductDto.getImage());
+
+        ResponseEntity<FakeStoreProductDto> responseEntity1=
+                restTemplate.postForEntity(genericProductUrl, genericProductDto1, FakeStoreProductDto.class);
+
+        return convertToGenericProductDto(responseEntity1.getBody());
     }
 }
