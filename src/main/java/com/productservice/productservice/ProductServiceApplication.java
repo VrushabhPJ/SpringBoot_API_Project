@@ -242,14 +242,31 @@ public class ProductServiceApplication implements CommandLineRunner {
 //
 //        Product savedProduct3= productRepository.save(product3);
 
-        Optional<Category> optionalCategory= categoryRepository.findById(UUID.fromString("ccf960c4-98d8-4efc-9093-02c4586521b5"));
-
-        Category category= optionalCategory.get();
+//        Optional<Category> optionalCategory= categoryRepository.findById(UUID.fromString("ccf960c4-98d8-4efc-9093-02c4586521b5"));
+//
+//        Category category= optionalCategory.get();
 
 //        List<Product> products= category.getProducts();
 //
 //        for (Product product1 : products) {
 //            System.out.println(product1.getTitle());
 //        }
+
+//        List<Product> products= productRepository.findAllByTitle("iPhone 14 pro plus");
+
+//        List<Product> products= productRepository.findAllByTitleAndDescription("iPhone 14 pro plus" , "Best camera");
+
+//        List<Product> products= productRepository.findAllByPrice_ValueGreaterThan(150000);
+
+//        Category category= new Category();
+//        category.setName("Andriod");
+//        Category savedCategory = categoryRepository.save(category);
+//
+//        Product product4= new Product("Samsung Fold 5" , "Best Fold Phone", "IMG", savedCategory, new Price("INR" , 49000.0));
+//
+//        Product savedProduct4= productRepository.save(product4);
+
+        List<Product> products= productRepository.findAllByPrice_ValueBetween(100000 , 170000);
+
     }
 }
