@@ -17,6 +17,7 @@ import com.productservice.productservice.repository.CategoryRepository;
 import com.productservice.productservice.repository.OrderRepository;
 import com.productservice.productservice.repository.PriceRepository;
 import com.productservice.productservice.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -32,16 +33,13 @@ public class ProductServiceApplication implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final PriceRepository priceRepository;
-    private final OrderRepository orderRepository;
 
     public ProductServiceApplication(CategoryRepository categoryRepository,
                                      ProductRepository productRepository,
-                                     PriceRepository priceRepository,
-                                     OrderRepository orderRepository) {
+                                     PriceRepository priceRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.priceRepository = priceRepository;
-        this.orderRepository = orderRepository;
     }
 
 //    private MentorRepository mentorRepository;
@@ -74,6 +72,7 @@ public class ProductServiceApplication implements CommandLineRunner {
 
 
     @Override
+    //@Transactional
     public void run(String... args) throws Exception {
 
 //        Mentor mentor= new Mentor();
@@ -165,7 +164,7 @@ public class ProductServiceApplication implements CommandLineRunner {
 //        price.setCurrency("INR");
 //        price.setValue(100000);
 //
-//        Price savedPrice = priceRepository.save(price);
+//        //Price savedPrice = priceRepository.save(price);
 //
 //        Category category=new Category();
 //        category.setName("Apple devices");
@@ -176,11 +175,81 @@ public class ProductServiceApplication implements CommandLineRunner {
 //        product.setTitle("iPhone 15 pro plus");
 //        product.setDescription("Best iPhone ever for camera");
 //        product.setCategory(savedCategory);
-//        product.setPrice(savedPrice);
-//
+//        product.setPrice(price);
+
 //        Product savedProduct= productRepository.save(product);
 
-//        priceRepository.deleteById(UUID.fromString("f234acc5-a593-4a7e-8981-891e00a8f6dd")); /* Not Allowed*/
+        //priceRepository.deleteById(UUID.fromString("f234acc5-a593-4a7e-8981-891e00a8f6dd")); /* Not Allowed*/
 
+        //productRepository.deleteById(UUID.fromString("74607eff-3556-4899-aa0f-b8c17c13c825"));
+
+//        Category category= new Category();
+//        category.setName("Apple devices");
+//        Category savedCategory = categoryRepository.save(category);
+//
+//        Price price=new Price();
+//        price.setValue(100000);
+//        price.setCurrency("INR");
+
+//        Optional<Price> price= priceRepository.findById(UUID.fromString("19de745d-0023-4558-9b31-e852e5ff95eb"));
+//        if(price.isEmpty()) {
+//            throw new Exception("price is empty");
+//        }
+//        Price price1= price.get();
+
+//        Optional<Category> optionalCategory= categoryRepository.findById(UUID.fromString("ccf960c4-98d8-4efc-9093-02c4586521b5"));
+//        if(optionalCategory.isEmpty()) {
+//            throw  new Exception("Category is empty");
+//        }
+//        Category category= optionalCategory.get();
+//
+//        Price price1=new Price();
+//        price1.setValue(112000);
+//        price1.setCurrency("INR");
+//
+//        Product product1= new Product();
+//        product1.setPrice(price1);
+//        product1.setTitle("iPhone 14 pro plus +");
+//        product1.setDescription("Best camera");
+//        product1.setImage("IMG");
+//        product1.setCategory(category);
+//
+//        Product savedProduct1= productRepository.save(product1);
+//
+//        Price price2=new Price();
+//        price2.setValue(150300);
+//        price2.setCurrency("INR");
+//
+//        Product product2= new Product();
+//        product2.setPrice(price2);
+//        product2.setTitle("iPhone 14 pro plus");
+//        product2.setDescription("Best camera");
+//        product2.setImage("IMG");
+//        product2.setCategory(category);
+//
+//        Product savedProduct2= productRepository.save(product2);
+//
+//        Price price3=new Price();
+//        price3.setValue(200000);
+//        price3.setCurrency("INR");
+//
+//        Product product3= new Product();
+//        product3.setPrice(price3);
+//        product3.setTitle("iPhone 14 pro plus");
+//        product3.setDescription("Best camera");
+//        product3.setImage("IMG");
+//        product3.setCategory(category);
+//
+//        Product savedProduct3= productRepository.save(product3);
+
+        Optional<Category> optionalCategory= categoryRepository.findById(UUID.fromString("ccf960c4-98d8-4efc-9093-02c4586521b5"));
+
+        Category category= optionalCategory.get();
+
+//        List<Product> products= category.getProducts();
+//
+//        for (Product product1 : products) {
+//            System.out.println(product1.getTitle());
+//        }
     }
 }
