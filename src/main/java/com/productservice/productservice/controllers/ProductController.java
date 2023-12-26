@@ -3,6 +3,7 @@ package com.productservice.productservice.controllers;
 import com.productservice.productservice.dtos.GenericProductDto;
 import com.productservice.productservice.exceptions.ProductNotFoundException;
 import com.productservice.productservice.services.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +12,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private ProductService productService;
+    private final ProductService productService;
+    //@Autowired optional
     //constructor injection
-    ProductController(@Qualifier("fakeStoreProductService") ProductService productService) {
+    //@Qualifier("fakeStoreProductService")
+    ProductController(ProductService productService) {
         this.productService= productService;
     }
 
