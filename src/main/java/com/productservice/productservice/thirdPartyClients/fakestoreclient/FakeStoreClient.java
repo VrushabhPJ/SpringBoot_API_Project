@@ -45,7 +45,7 @@ public class FakeStoreClient {
     }
 
 
-    public FakeStoreProductDto getProductById(Long id) throws ProductNotFoundException {
+    public FakeStoreProductDto  getProductById(Long id) throws ProductNotFoundException {
         RestTemplate restTemplate = restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDto> responseEntity =
                 restTemplate.getForEntity(specificProductUrl, FakeStoreProductDto.class, id);
@@ -54,6 +54,7 @@ public class FakeStoreClient {
 
         if(fakeStoreProductDto == null) {
             throw new ProductNotFoundException("Product id "+ id +" doesn't exist");
+            //return null;
         }
 
         return fakeStoreProductDto;
