@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private final ProductService productService;
+    private ProductService productService;
     //@Autowired optional
     //constructor injection
     //@Qualifier("fakeStoreProductService")
