@@ -2,9 +2,13 @@ package com.productservice.productservice.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.productservice.productservice.dtos.GenericProductDto;
+import com.productservice.productservice.exceptions.ProductNotFoundException;
 import com.productservice.productservice.services.ProductService;
 import jakarta.inject.Inject;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,11 +17,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.is;
 
 
 @WebMvcTest(ProductController.class)
@@ -31,6 +38,11 @@ public class ProductControllerWebMvcTest {
 
     @Inject
     private ObjectMapper objectMapper;
+
+    @Captor
+    private ArgumentCaptor<Long> argumentCaptor;
+    @Inject
+    private ProductController productController;
 
     @Test
     void testGetAllProductsReturnEmptyList() throws Exception {
@@ -70,7 +82,7 @@ public class ProductControllerWebMvcTest {
         outputGenericProductDto.setDescription(productToCreate.getDescription());
         outputGenericProductDto.setId(1000L);
 
-        when(productService.createProduct(productToCreate))
+        when(productService.createProduct(any()))
                 .thenReturn(outputGenericProductDto);
 
         mockMvc.perform(post("/products")
@@ -80,8 +92,26 @@ public class ProductControllerWebMvcTest {
                 .andExpect(
                         content().string(objectMapper.writeValueAsString(outputGenericProductDto))
                 )
-                .andExpect(status().is(200));
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.title", is("Macbook")))
+                .andExpect(jsonPath("$.price", is(200000)));
 
+    }
+
+    @Test
+    @DisplayName("testProductControllerCallsProductServiceWithSameProductIdAsInput")
+    void testIfSameInput() throws ProductNotFoundException {
+        //This is the test case to check if productController is passing the same productId to the
+        //productService as the input.
+        Long id = 100L;
+
+        when(productService.getProductById(id)).thenReturn(new GenericProductDto());
+
+        GenericProductDto genericProductDto =  productController.getProductById(id);
+
+        verify(productService).getProductById(argumentCaptor.capture());
+
+        assertEquals(id, argumentCaptor.getValue());
     }
 
 }
