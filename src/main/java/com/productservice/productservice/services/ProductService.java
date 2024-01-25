@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface ProductService {
-    GenericProductDto getProductById(Long id) throws ProductNotFoundException;
+    GenericProductDto getProductById(String authToken, Long id) throws ProductNotFoundException;
 
     List<GenericProductDto> getAllProducts();
 
@@ -16,5 +16,6 @@ public interface ProductService {
     GenericProductDto createProduct(GenericProductDto genericProductDto);
 
     GenericProductDto updateProductById(Long id , GenericProductDto genericProductDto);
+
 
 }
