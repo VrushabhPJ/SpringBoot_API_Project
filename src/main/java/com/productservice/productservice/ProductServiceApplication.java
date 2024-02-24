@@ -28,19 +28,19 @@ import java.util.Optional;
 import java.util.UUID;
 
 @SpringBootApplication
-public class ProductServiceApplication {
+public class ProductServiceApplication implements CommandLineRunner {
 
-//    private final CategoryRepository categoryRepository;
-//    private final ProductRepository productRepository;
-//    private final PriceRepository priceRepository;
-//
-//    public ProductServiceApplication(CategoryRepository categoryRepository,
-//                                     ProductRepository productRepository,
-//                                     PriceRepository priceRepository) {
-//        this.categoryRepository = categoryRepository;
-//        this.productRepository = productRepository;
-//        this.priceRepository = priceRepository;
-//    }
+    private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
+    private final PriceRepository priceRepository;
+
+    public ProductServiceApplication(CategoryRepository categoryRepository,
+                                     ProductRepository productRepository,
+                                     PriceRepository priceRepository) {
+        this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
+        this.priceRepository = priceRepository;
+    }
 
 //    private MentorRepository mentorRepository;
 //    private StudentRepository studentRepository;
@@ -69,6 +69,54 @@ public class ProductServiceApplication {
     public static void main(String[] args) {
 
         SpringApplication.run(ProductServiceApplication.class, args);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+
+//        Category category= new Category();
+//        category.setName("Apple devices");
+//        Category savedCategory = categoryRepository.save(category);
+//
+//
+//        Price price1=new Price();
+//        price1.setValue(112000);
+//        price1.setCurrency("INR");
+//
+//        Product product1= new Product();
+//        product1.setPrice(price1);
+//        product1.setTitle("iPhone 14 pro plus +");
+//        product1.setDescription("Best camera");
+//        product1.setImage("IMG");
+//        product1.setCategory(category);
+//
+//        Product savedProduct1= productRepository.save(product1);
+//
+//        Price price2=new Price();
+//        price2.setValue(150300);
+//        price2.setCurrency("INR");
+//
+//        Product product2= new Product();
+//        product2.setPrice(price2);
+//        product2.setTitle("iPhone 14 pro plus");
+//        product2.setDescription("Best camera");
+//        product2.setImage("IMG");
+//        product2.setCategory(category);
+//
+//        Product savedProduct2= productRepository.save(product2);
+//
+//        Price price3=new Price();
+//        price3.setValue(200000);
+//        price3.setCurrency("INR");
+//
+//        Product product3= new Product();
+//        product3.setPrice(price3);
+//        product3.setTitle("iPhone 14 pro plus");
+//        product3.setDescription("Best camera");
+//        product3.setImage("IMG");
+//        product3.setCategory(category);
+//
+//        Product savedProduct3= productRepository.save(product3);
     }
 
 

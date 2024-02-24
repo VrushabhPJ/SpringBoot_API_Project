@@ -16,10 +16,12 @@ public class SpringSecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         //.requestMatchers("/products").hasAuthority("admin")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                         //.requestMatchers("/getProducts").permitAll()
 //                        .anyRequest().permitAll()
                 )
+                .csrf().disable()
+                .cors().disable()
 //                 Form login handles the redirect to the login page from the
 //                 authorization server filter chain
                 .formLogin(withDefaults())
