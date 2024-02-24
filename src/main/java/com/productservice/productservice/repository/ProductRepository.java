@@ -2,6 +2,7 @@ package com.productservice.productservice.repository;
 
 import com.productservice.productservice.models.Product;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,5 +28,7 @@ public interface ProductRepository extends JpaRepository<Product , UUID> {
 
     //@Query(value = "select * from product" , nativeQuery = true)
     List<Product> findAllByPrice_ValueBetween(Integer x, Integer y);
+
+    List<Product> findAllByTitleContainingIgnoreCase(String query, Pageable pageable);
 
 }

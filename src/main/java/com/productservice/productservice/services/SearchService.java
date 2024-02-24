@@ -3,11 +3,13 @@ package com.productservice.productservice.services;
 import com.productservice.productservice.dtos.FakeStoreProductDto;
 import com.productservice.productservice.dtos.GenericProductDto;
 import com.productservice.productservice.models.Product;
+import com.productservice.productservice.models.SortParam;
 import com.productservice.productservice.repository.ProductRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +33,27 @@ public class SearchService {
     }
 
 
-    public List<GenericProductDto> searchProduct(String query, int pageNumber, int pageSize ) {
-        PageRequest pageRequest= PageRequest.of(pageNumber, pageSize);
+    public List<GenericProductDto> searchProduct(String query, int pageNumber, int pageSize, List<SortParam> sortParams ) {
 
-        List<Product> products= productRepository.findAllByTitleContaining(query, pageRequest);
-        List<GenericProductDto> genericProductDtos= new ArrayList<>();
+        Sort sort= null;
+        if (sortParams.get(0).getSortType().equals("ASC")) {
+            sort = Sort.by(sortParams.get(0).getSortParamName()).ascending();
+        } else {
+            sort = Sort.by(sortParams.get(0).getSortParamName()).descending();
+        }
+        for (int i = 1; i < sortParams.size(); i++) {
+            if (sortParams.get(i).getSortType().equals("ASC")) {
+                sort.and(Sort.by(sortParams.get(i).getSortParamName()).ascending());
+            } else {
+                sort.and(Sort.by(sortParams.get(i).getSortParamName()).descending());
+            }
+        }
 
-        for(Product product: products) {
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
+        List<Product> products = productRepository.findAllByTitleContainingIgnoreCase(query, pageRequest);
+        List<GenericProductDto> genericProductDtos = new ArrayList<>();
+        for (Product product : products) {
             genericProductDtos.add(convertToGenericProductDto(product));
         }
         return genericProductDtos;
