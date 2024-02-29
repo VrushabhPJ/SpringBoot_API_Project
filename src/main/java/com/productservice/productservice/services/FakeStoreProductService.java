@@ -9,6 +9,7 @@ import com.productservice.productservice.thirdPartyClients.fakestoreclient.FakeS
 import org.antlr.v4.runtime.Token;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,11 +27,12 @@ public class FakeStoreProductService implements ProductService{
 
     private final FakeStoreClient fakeStoreClient;
     private TokenValidator tokenValidator;
+    private RedisTemplate<String, FakeStoreProductDto> redisTemplate;
 
-    FakeStoreProductService(FakeStoreClient fakeStoreClient, TokenValidator tokenValidator) {
+    FakeStoreProductService(FakeStoreClient fakeStoreClient, TokenValidator tokenValidator, RedisTemplate redisTemplate) {
         this.fakeStoreClient= fakeStoreClient;
         this.tokenValidator= tokenValidator;
-
+        this.redisTemplate= redisTemplate;
     }
 
     private static GenericProductDto convertToGenericProductDto(FakeStoreProductDto fakeStoreProductDto) {
@@ -50,13 +52,21 @@ public class FakeStoreProductService implements ProductService{
 
         //System.out.println(authToken);
         Optional<JWTObject> jwtObjectOptional= tokenValidator.validateToken(authToken);
-        if(jwtObjectOptional.isEmpty()) {
-            //reject the request
-            return null;
+
+//        if(jwtObjectOptional.isEmpty()) {
+//            //reject the request
+//            return null;
+//        }
+
+        FakeStoreProductDto fakeStoreProductDto = (FakeStoreProductDto) redisTemplate.opsForHash().get("PRODUCTS", id);
+        if (fakeStoreProductDto != null) {
+            return convertToGenericProductDto(fakeStoreProductDto);
         }
 
+        fakeStoreProductDto = fakeStoreClient.getProductById(id);
+        redisTemplate.opsForHash().put("PRODUCTS", id, fakeStoreProductDto);
 
-        return convertToGenericProductDto(fakeStoreClient.getProductById(id));
+        return convertToGenericProductDto(fakeStoreProductDto);
     }
 
     @Override

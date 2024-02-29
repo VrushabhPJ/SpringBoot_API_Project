@@ -22,7 +22,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public GenericProductDto getProductById(@RequestHeader(HttpHeaders.AUTHORIZATION) String authToken, @PathVariable("id") Long id) throws ProductNotFoundException {
+    public GenericProductDto getProductById(@RequestHeader(value = HttpHeaders.AUTHORIZATION , required = false) String authToken, @PathVariable("id") Long id) throws ProductNotFoundException {
         return productService.getProductById(authToken ,id);
     }
 
